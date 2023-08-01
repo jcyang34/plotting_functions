@@ -1,3 +1,20 @@
+
+top_DEs_all$diffexpressed <- "NO"
+top_DEs_all$diffexpressed[top_DEs_all$avg_logFC > 2 & top_DEs_all$p_val_adj < 1e-10] <- "UP"
+top_DEs_all$diffexpressed[top_DEs_all$avg_logFC < -2 & top_DEs_all$p_val_adj < 1e-10] <- "DOWN"
+top_DEs_all$delabel <- NA
+top_DEs_all$delabel[top_DEs_all$diffexpressed != "NO"] <- top_DEs_all$gene[top_DEs_all$diffexpressed != "NO"]
+
+
+top_DEs_all$DE <- top_DEs_all$diffexpressed != "NO"
+
+top_DEs_all$regions <- top_DEs_all$region
+top_DEs_all$regions[top_DEs_all$regions == "INS"] <- "Insular Cortex"
+top_DEs_all$regions[top_DEs_all$regions == "PFC"] <- "Prefrontal Cortex"
+top_DEs_all$regions[top_DEs_all$regions == "VST"] <- "Ventral Striatum"
+
+top_DEs_all$avg_logFC <- -(top_DEs_all$avg_logFC)
+
 volcano_p <- ggplot(data=top_DEs_all, aes(x=avg_logFC, y=-log10(p_val_adj), col=cell_type,shape=regions,label=delabel,alpha=DE)) +
   geom_point(size=3) +
  theme_linedraw() +
